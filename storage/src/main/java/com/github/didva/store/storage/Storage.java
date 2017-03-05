@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface Storage<T extends StoredEntity<ID>, ID> {
 
-    T saveOrUpdate(T entity);
+    T save(T entity);
+
+    T update(T entity);
 
     T findOne(ID id);
 

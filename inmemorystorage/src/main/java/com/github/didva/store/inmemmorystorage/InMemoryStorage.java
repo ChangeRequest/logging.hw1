@@ -23,11 +23,21 @@ public class InMemoryStorage<T extends StoredEntity<ID>, ID> implements Storage<
     }
 
     @Override
-    public T saveOrUpdate(T entity) {
-        if (entity.getId() == null) {
-            entity.setId(idGenerator.generateId());
+    public T save(T entity) {
+        if (entity.getId() != null) {
+            throw new IllegalArgumentException();
         }
+        entity.setId(idGenerator.generateId());
         storage.put(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public T update(T entity) {
+        if (entity.getId() == null || !storage.containsKey(entity.getId())) {
+            throw new IllegalArgumentException();
+        }
+        storage.replace(entity.getId(), entity);
         return entity;
     }
 

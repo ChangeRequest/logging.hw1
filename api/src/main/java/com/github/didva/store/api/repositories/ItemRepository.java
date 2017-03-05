@@ -17,7 +17,10 @@ public class ItemRepository {
     }
 
     public Item saveOrUpdate(Item item) {
-        return itemStorage.saveOrUpdate(item);
+        if (item.getId() == null) {
+            return itemStorage.save(item);
+        }
+        return itemStorage.update(item);
     }
 
     public Item find(Long id) {

@@ -1,8 +1,8 @@
 package com.github.didva.store.api;
 
+import com.github.didva.strore.model.Basket;
 import com.github.didva.strore.model.Item;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,40 +10,37 @@ import java.util.Map;
 
 public class BasketApi {
 
-    private LinkedHashMap<Item, Integer> items = new LinkedHashMap<>();
+    private Basket basket = new Basket();
 
     public void add(Item item) {
-        Integer currentAmount = items.get(item);
-        if (currentAmount == null) {
-            items.put(item, 1);
-        } else {
-            items.put(item, currentAmount + 1);
-        }
+        basket.addItem(item);
     }
 
     public List<Item> getLast(int n) {
+        List<Item> items = basket.getItems();
         int size = items.size();
-        if (size < n || n < 1) {
+        if (n < 1 || n > size) {
             throw new IllegalArgumentException();
         }
-        return Collections.unmodifiableList(new ArrayList<>(items.keySet()).subList(size - n, size));
+        return Collections.unmodifiableList(items.subList(size - n, size));
     }
 
     public void remove(Item item) {
-        Integer currentAmount = items.get(item);
-        if (currentAmount == null) {
-            throw new IllegalArgumentException();
-        } else if (currentAmount == 1) {
-            items.remove(item);
-        } else {
-            items.replace(item, currentAmount - 1);
-        }
+        basket.removeItem(item);
     }
 
     public Map<Item, Integer> checkout() {
-        LinkedHashMap<Item, Integer> itemsToCheckout = this.items;
-        this.items = new LinkedHashMap<>();
-        return itemsToCheckout;
+        List<Item> items = basket.getItems();
+        LinkedHashMap<Item, Integer> collectedItems = new LinkedHashMap<>();
+        for (Item item : items) {
+            Integer amount = collectedItems.get(item);
+            if (amount != null) {
+                collectedItems.replace(item, amount + 1);
+            } else {
+                collectedItems.put(item, 1);
+            }
+        }
+        return collectedItems;
     }
 
 }

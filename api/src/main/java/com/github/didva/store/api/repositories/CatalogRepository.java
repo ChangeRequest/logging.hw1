@@ -17,7 +17,10 @@ public class CatalogRepository {
     }
 
     public Catalog saveOrUpdate(Catalog catalog) {
-        return catalogStorage.saveOrUpdate(catalog);
+        if (catalog.getId() == null) {
+            return catalogStorage.save(catalog);
+        }
+        return catalogStorage.update(catalog);
     }
 
     public Catalog find(Long id) {

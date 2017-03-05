@@ -17,7 +17,10 @@ public class CategoryRepository {
     }
 
     public Category saveOrUpdate(Category category) {
-        return categoryStorage.saveOrUpdate(category);
+        if (category.getId() == null) {
+            return categoryStorage.save(category);
+        }
+        return categoryStorage.update(category);
     }
 
     public Category find(Long id) {
