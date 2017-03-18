@@ -37,3 +37,7 @@ Create custom Logback configuration.
 * **api**:
   * new file should be created if current file size > 1KB
   * you should store at least 10 latest files
+
+Note
+------------------------
+This task is connected with https://github.com/ChangeRequest/dependency-management.hw1
